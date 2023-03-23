@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import Supplier from "./supplier.model.js";
-import connect from "../repositories/connection.js";
+import connect from "./src/repositories/connection.js";
 
 const Product = connect.define(
   "products",

@@ -3,10 +3,10 @@ import express from "express";
 import cors from "cors";
 import winston from "winston";
 
-import clientRounter from "./routes/client.routes.js";
-import productRouter from "./routes/product.routes.js";
-import saleRouter from "./routes/sales.routes.js";
-import supplierRouter from "./routes/supplier.routes.js";
+import clientRouter from "./src/routes/client.routes.js";
+import productRouter from "./src/routes/product.routes.js";
+import saleRouter from "./src/routes/sales.routes.js";
+import supplierRouter from "./src/routes/supplier.routes.js";
 
 const { combine, timestamp, label, printf } = winston.format;
 const logFormat = printf(({ level, message, label, timestamp }) => {
@@ -24,7 +24,7 @@ global.logger = winston.createLogger({
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/client", clientRounter);
+app.use("/client", clientRouter);
 app.use("/product", productRouter);
 app.use("/sale", saleRouter);
 app.use("/supplier", supplierRouter);

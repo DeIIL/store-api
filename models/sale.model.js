@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import connect from "../repositories/connection.js";
+import connect from "./src/repositories/connection.js";
 import Product from "./product.model.js";
 import Client from "./client.model.js";
 
