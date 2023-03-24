@@ -1,70 +1,49 @@
+import productInfoSchema from "../../schemas/productInfo.schema.js";
 import { ObjectId } from "mongodb";
-import { getClient } from "./mongo.db.js";
+import { connect } from "./mongo.db.js";
 
 async function createProductInfo(productInfo) {
-  const client = getClient();
   try {
-    await client.connect();
-    await client.db("pet-api").collection("productInfo").insertOne(productInfo);
+    const mongoose = await connect();
+    const ProductInfo = mongoose.model("ProductInfo", productInfoSchema);
+    productInfo = new ProductInfo(productInfo);
+    await productInfo.save();
   } catch (error) {
     throw error;
-  } finally {
-    await client.close();
   }
 }
 
 async function updateProductInfo(productInfo) {
-  const client = getClient();
   try {
-    await client.connect();
-    await client
-      .db("pet-api")
-      .collection("productInfo")
-      .updateOne(
-        { productId: productInfo.productId },
-        { $set: { ...productInfo } }
-      );
-    return productInfo;
+    const mongoose = await connect();
+    const ProductInfo = mongoose.model("ProductInfo", productInfoSchema);
+    await ProductInfo.findOneAndUpdate(
+      { productId: productInfo.productId },
+      productInfo
+    );
   } catch (error) {
     throw error;
-  } finally {
-    await client.close();
   }
 }
 
 async function getProductInfo(productId) {
-  const client = getClient();
   try {
-    await client.connect();
-    return await client
-      .db("pet-api")
-      .collection("productInfo")
-      .findOne({ productId });
+    const mongoose = await connect();
+    const ProductInfo = mongoose.model("ProductInfo", productInfoSchema);
+    const query = ProductInfo.findOne({ productId: productId });
+    return await query.exec();
   } catch (error) {
     throw error;
-  } finally {
-    await client.close();
   }
 }
 
 async function createReview(review, productId) {
-  const client = getClient();
   try {
-    await client.connect();
-    const reviewInfo = await client
-      .db("pet-api")
-      .collection("productInfo")
-      .findOne({ productId });
-    reviewInfo.reviews.push(review);
-    let updated = await client
-      .db("pet-api")
-      .collection("productInfo")
-      .findOneAndUpdate({ productId: productId }, { $set: { ...reviewInfo } });
-    return await getProductInfo(productId);
+    const productInfo = await getProductInfo(productId);
+    productInfo.reviews.push(review);
+    await updateProductInfo(productInfo);
   } catch (error) {
     throw error;
-  } finally {
-    await client.close();
   }
 }
 
@@ -79,33 +58,23 @@ async function deleteReview(productId, index) {
 }
 
 async function getAllProductInfo() {
-  const client = getClient();
   try {
-    await client.connect();
-    return await client
-      .db("pet-api")
-      .collection("productInfo")
-      .find({})
-      .toArray();
+    const mongoose = await connect();
+    const productInfo = mongoose.model("productInfo", productInfoSchema);
+    const query = productInfo.find({});
+    return await query.exec();
   } catch (error) {
     throw error;
-  } finally {
-    await client.close();
   }
 }
 
 async function deleteProductInfo(id) {
-  const client = getClient();
   try {
-    await client.connect();
-    await client
-      .db("pet-api")
-      .collection("productInfo")
-      .deleteOne({ _id: new ObjectId(id) });
+    const mongoose = await connect();
+    const productInfo = mongoose.model("productInfo", productInfoSchema);
+    await productInfo.deleteOne({ _id: ObjectId(id) }); //findByIdAndDelete
   } catch (error) {
     throw error;
-  } finally {
-    await client.close();
   }
 }
 

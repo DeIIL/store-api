@@ -1,6 +1,6 @@
-import Client from "../models/client.model.js";
-import Product from "../models/product.model.js";
-import Sale from "../models/sale.model.js";
+import Client from "../../models/client.model.js";
+import Product from "../../models/product.model.js";
+import Sale from "../../models/sale.model.js";
 
 async function insertSale(sale) {
   try {

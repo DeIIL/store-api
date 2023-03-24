@@ -1,5 +1,5 @@
 //import { connect } from "./connection.js";
-import Client from "../models/client.model.js";
+import Client from "../../models/client.model.js";
 
 async function insertClient(client) {
   try {

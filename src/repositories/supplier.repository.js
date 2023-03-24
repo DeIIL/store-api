@@ -1,4 +1,4 @@
-import Supplier from "../models/supplier.model.js";
+import Supplier from "../../models/supplier.model.js";
 
 async function insertSupplier(supplier) {
   try {
